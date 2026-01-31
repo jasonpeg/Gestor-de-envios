@@ -1,0 +1,5 @@
+{
+  "name": "Gestor de Envíos Pro",
+  "description": "Aplicación de gestión de logística con IA para importar órdenes, gestionar productos y controlar estados de envío.",
+  "requestFramePermissions": []
+}

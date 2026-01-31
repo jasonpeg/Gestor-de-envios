@@ -1,0 +1,21 @@
+{
+  "short_name": "GestorEnvío",
+  "name": "Gestor de Envíos Merquix",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2830/2830305.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2830/2830305.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#f3f4f6",
+  "orientation": "any"
+}
