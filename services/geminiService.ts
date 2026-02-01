@@ -2,7 +2,11 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Order } from "../types";
 
 // Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+if (!apiKey) {
+  console.error("Missing VITE_GEMINI_API_KEY in .env.local");
+}
+const ai = new GoogleGenAI({ apiKey: apiKey || '' });
 
 /**
  * Parses an image or PDF file to extract order data using Gemini.
@@ -10,25 +14,21 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 export const parseOrderDocument = async (base64Data: string, mimeType: string): Promise<Partial<Order>[]> => {
   try {
     // Updated to use the correct model for multimodal tasks as per instructions
-    const model = "gemini-3-flash-preview";
+    const model = "gemini-2.0-flash";
 
     const prompt = `
       Analiza este documento (imagen de Excel, PDF o foto de pantalla).
       Extrae los datos de las filas para llenar una tabla de envíos con las siguientes columnas exactas:
 
-      1. NOMBRE (Nombre del cliente)
-      2. NUMERO DE ENVIO (Código de rastreo o ID)
-      3. COMPAÑIA DE ENVIO (Ej: AUREL, TRANSFORTE, etc.)
-      4. CREACIÓN (Fecha del envío)
-      5. CIUDAD (Destino)
-      6. MONTO (Valor total)
-      7. PRODUCTO (Descripción del contenido, ej: "KIT CURCUMA, JABONES")
-      8. TELEFONO (Número de contacto)
+      1. Nombre del Cliente (NOMBRE)
+      2. Ciudad (CIUDAD/DESTINO)
+      3. Teléfono (TELEFONO)
+      4. Productos (DESCRIPCION/CONTENIDO)
+      5. Precio Total (TOTAL/MONTO/VALOR - Solo números, ej: 1950)
 
-      Reglas:
-      - Si la fecha no tiene año, asume el año actual. Usa formato YYYY-MM-DD.
-      - Limpia los números de teléfono.
-      - El MONTO debe ser numérico.
+      Atención:
+      - El campo 'Precio Total' es CRUCIAL. Busca valores como "$1,950", "2200", etc. y conviértelos a número puro.
+      - Si hay múltiples filas, extráelas todas.
       - Devuelve un array JSON.
     `;
 
@@ -71,7 +71,7 @@ export const parseOrderDocument = async (base64Data: string, mimeType: string): 
       // Handle potential markdown code blocks if the model includes them despite mimeType config
       const jsonString = textResponse.replace(/^```json\s*/, "").replace(/\s*```$/, "");
       const parsed = JSON.parse(jsonString);
-      
+
       // Transform raw parsing to partial Order objects
       return parsed.map((item: any) => ({
         customerName: item.customerName || "Desconocido",
@@ -91,7 +91,7 @@ export const parseOrderDocument = async (base64Data: string, mimeType: string): 
         }]
       }));
     }
-    
+
     return [];
 
   } catch (error) {

@@ -5,6 +5,9 @@ import { Mail, Lock, LogIn, Loader2, AlertCircle, Package } from 'lucide-react';
 export const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSignUp, setIsSignUp] = useState(false);
@@ -19,6 +22,13 @@ export const Login: React.FC = () => {
                 const { error } = await supabase.auth.signUp({
                     email,
                     password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            phone: phone,
+                            address: address
+                        }
+                    }
                 });
                 if (error) throw error;
                 alert('¡Registro exitoso! Por favor revisa tu correo para confirmar.');
@@ -56,6 +66,45 @@ export const Login: React.FC = () => {
                 </div>
 
                 <form onSubmit={handleAuth} className="space-y-5 relative z-10">
+
+                    {isSignUp && (
+                        <div className="space-y-4 animate-in slide-in-from-top-4 fade-in duration-300">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Nombre Completo</label>
+                                <input
+                                    type="text"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-gray-900 font-medium placeholder-gray-400 focus:ring-4 focus:ring-[#2563FF]/10 focus:border-[#2563FF] outline-none transition-all"
+                                    placeholder="Juan Pérez"
+                                    required={isSignUp}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Teléfono</label>
+                                <input
+                                    type="text"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-gray-900 font-medium placeholder-gray-400 focus:ring-4 focus:ring-[#2563FF]/10 focus:border-[#2563FF] outline-none transition-all"
+                                    placeholder="809-555-5555"
+                                    required={isSignUp}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Dirección</label>
+                                <input
+                                    type="text"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-gray-900 font-medium placeholder-gray-400 focus:ring-4 focus:ring-[#2563FF]/10 focus:border-[#2563FF] outline-none transition-all"
+                                    placeholder="Calle 123, Ciudad"
+                                    required={isSignUp}
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">Correo Electrónico</label>
                         <div className="relative">

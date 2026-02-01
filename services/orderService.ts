@@ -3,11 +3,19 @@ import { Order } from '../types';
 
 export const saveOrderToSupabase = async (order: Order) => {
     try {
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            throw new Error('User not authenticated');
+        }
+
         // 1. Insert into orders table
         const { error: orderError } = await supabase
             .from('orders')
             .insert({
                 id: order.id,
+                user_id: user.id, // Privacy: Link to user
                 customer_name: order.customerName,
                 shipping_number: order.shippingNumber,
                 shipping_company: order.shippingCompany,
@@ -32,6 +40,7 @@ export const saveOrderToSupabase = async (order: Order) => {
         if (order.items && order.items.length > 0) {
             const itemsToInsert = order.items.map(item => ({
                 order_id: order.id,
+                user_id: user.id, // Privacy: Link to user
                 product_id: item.productId,
                 product_name: item.productName,
                 quantity: item.quantity,

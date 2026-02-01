@@ -235,19 +235,19 @@ const App: React.FC = () => {
               Guardar Todo
             </button>
             <button
-              onClick={handleRestoreData}
-              className="mt-3 w-full text-xs text-gray-500 hover:text-[#B6FF2E] flex items-center justify-center gap-1 transition-colors"
-            >
-              <RefreshCw className="w-3 h-3" />
-              Restaurar Demo
-            </button>
-
-            <button
               onClick={handleLogout}
               className="mt-3 w-full text-xs text-red-400 hover:text-red-300 flex items-center justify-center gap-1 transition-colors border-t border-white/5 pt-3"
             >
               <LogOut className="w-3 h-3" />
               Cerrar Sesión
+            </button>
+
+            <button
+              onClick={handleRestoreData}
+              className="mt-3 w-full text-xs text-gray-500 hover:text-[#B6FF2E] flex items-center justify-center gap-1 transition-colors"
+            >
+              <RefreshCw className="w-3 h-3" />
+              Restaurar Demo
             </button>
           </div>
         </div>
