@@ -8,7 +8,7 @@ import ProductManager from './components/ProductManager';
 import ManualOrderSection from './components/ManualOrderSection';
 import InventorySection from './components/InventorySection';
 import { Login } from './components/Login';
-import { supabase } from './services/supabase';
+import { supabase } from './services/supabase'; // Correct import path
 import { Session } from '@supabase/supabase-js';
 
 // Mock Data
